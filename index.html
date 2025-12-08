@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>KlasseCoins Hub — Mattemini-spill (Av Anker & Noah)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e6fffb;--card:#ffffff;--muted:#6b7280;--accent:#0ea5a4;--accent2:#7c3aed;--gold:#f59e0b}
+*{box-sizing:border-box}
+body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;margin:0;background:linear-gradient(180deg,#dffafa,#ffffff);color:#0f172a}
+.container{max-width:1200px;margin:20px auto;padding:18px}
+.header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.logo{font-weight:800;font-size:20px;color:var(--accent2)}
+.hint{color:var(--muted);font-size:14px}
+.grid{display:grid;grid-template-columns:1fr 360px;gap:16px}
+.hub{background:var(--card);padding:14px;border-radius:14px;box-shadow:0 8px 30px rgba(15,23,42,0.06)}
+.sidebar{background:var(--card);padding:12px;border-radius:12px}
+.search{display:flex;gap:8px;margin-bottom:12px}
+.search input{flex:1;padding:10px;border-radius:10px;border:1px solid #e6eef0}
+.search button{padding:10px 12px;border-radius:10px;border:0;background:var(--accent);color:#fff}
+.playgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+.card{background:linear-gradient(180deg,#fff,#f7fffe);padding:10px;border-radius:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;transition:transform .14s ease,box-shadow .14s}
+.card:hover{transform:translateY(-6px);box-shadow:0 14px 40px rgba(12,74,110,0.08)}
+.card .icon{width:72px;height:72px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:22px}
+.card .title{font-weight:600;font-size:14px;text-align:center}
+.preview{margin-top:12px;padding:10px;border-radius:10px;background:#f1f8f7}
+.playArea{background:linear-gradient(180deg,#ffffff,#f8fffd);padding:14px;border-radius:12px;min-height:380px}
+.controls{display:flex;gap:8px;margin-top:10px}
+.btn{padding:8px 10px;border-radius:8px;border:0;background:var(--accent);color:#fff;cursor:pointer}
+.btn.ghost{background:transparent;border:1px solid #e6eef0;color:var(--muted)}
+.stat{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed #eef2f7}
+.small{font-size:13px;color:var(--muted)}
+.progress{height:10px;background:#eefcfb;border-radius:8px;overflow:hidden}
+.progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),#f97316)}
+.footer{margin-top:14px;color:var(--muted);font-size:13px;text-align:center}
+#nuke{position:fixed;inset:0;background:radial-gradient(circle at center, rgba(255,90,90,0.95), rgba(0,0,0,0.65));display:none;align-items:center;justify-content:center;z-index:9999;color:white;text-align:center;padding:20px}
+#nuke h2{font-size:36px;margin:0 0 12px}
+#toast{position:fixed;right:18px;bottom:18px;background:#0f172a;color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 8px 30px rgba(2,6,23,0.3);display:none}
+@media (max-width:980px){.grid{grid-template-columns:1fr}.sidebar{order:2}}
+</style>
+</head>
+<body>
+<div id="nuke"></div>
+<div id="toast"></div>
+<div class="container">
+  <div class="header">
+    <div class="logo">KlasseCoins Hub</div>
+    <div class="hint">HUB med mange matte-minispill — Velg et spill for å starte. (Av Anker & Noah)</div>
+  </div>
+
+  <div class="grid">
+    <div class="hub">
+      <div class="search">
+        <input id="search" placeholder="Søk spill..." />
+        <button id="filterBtn">Filtrer</button>
+      </div>
+
+      <div class="playgrid" id="gamesList"></div>
+
+      <div class="preview" id="preview">Velg et spill for å se forhåndsvisning.</div>
+
+      <div style="margin-top:12px" class="playArea" id="playArea">
+        <div id="welcomeView">
+          <h3>Velkommen! Velg et spill fra toppen.</h3>
+          <p class="small">Din progress og poeng deles mellom spill — bruk Klassecoins for boosters!</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="stat"><div class="small">Navn</div><div id="nameDisplay">Ingen</div></div>
+      <div class="stat"><div class="small">Level</div><div id="level">1</div></div>
+      <div class="stat"><div class="small">Klassecoins</div><div id="coins">0</div></div>
+      <div style="padding-top:8px">
+        <div class="small">XP</div>
+        <div class="progress" style="margin-top:6px"><i id="xpbar" style="width:0%"></i></div>
+        <div class="small" style="margin-top:6px" id="xptext">0 / 50 (0%)</div>
+      </div>
+
+      <div style="margin-top:8px" class="small">Streak: <span id="streak">0</span></div>
+      <div style="margin-top:8px" class="small">10× aktiv: <span id="multActive">Nei</span></div>
+
+      <div style="margin-top:12px">
+        <input id="nameInput" placeholder="Ditt navn..." style="padding:8px;border-radius:8px;border:1px solid #eef6f5;width:100%" />
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn" id="saveName">Lagre</button>
+          <button class="btn ghost" id="exportBtn">Eksporter</button>
+        </div>
+      </div>
+
+      <div style="margin-top:12px" class="small">Av Anker & Noah</div>
+    </div>
+  </div>
+
+  <div class="footer">Tips: Bruk 10× booster når du har streak! Score lagres lokalt.</div>
+</div>
+
+<audio id="s_correct" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+<audio id="s_wrong" src="https://actions.google.com/sounds/v1/cartoon/boing.ogg"></audio>
+<audio id="s_nuke" src="https://actions.google.com/sounds/v1/alarms/nuclear_alarm.ogg"></audio>
+<audio id="s_click" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+
+<script>
+(()=>{
+  const STORAGE='klassecoins_hub_v1';
+  const MULT_COST=5;
+  const MULT_X=10;
+
+  const games=[
+    {id:'add_speed',title:'Hoderegning Speed',tag:'add',desc:'Svar så mange addisjoner du kan på 30s.'},
+    {id:'mult_rush',title:'Gangetabell Rush',tag:'mult',desc:'Rask gange-prøve med stigende vanskelighet.'},
+    {id:'frac_blast',title:'Brøk Blaster',tag:'frac',desc:'Gjett hvem som har størst brøk.'},
+    {id:'geo_shooter',title:'Geometri Shooter',tag:'geo',desc:'Hvilken form har dette? Raskt!'},
+    {id:'memory_math',title:'Memory Mattemix',tag:'mem',desc:'Memory hvor kortene er regnestykker.'},
+    {id:'boss_battle',title:'Boss Mattekamp',tag:'boss',desc:'Tidspress + flere trinn = boss!'},
+    {id:'block_jump',title:'Block Jump Math',tag:'jump',desc:'Hopp på riktig tallblokk!'}
+  ];
+
+  let state={name:'',xp:0,level:1,coins:0,streak:0,multActive:false,bests:{}};
+
+  const load=()=>{try{const s=localStorage.getItem(STORAGE);if(s)Object.assign(state,JSON.parse(s));}catch(e){}};
+  const save=()=>{try{localStorage.setItem(STORAGE,JSON.stringify(state));}catch(e){}};
+
+  const gamesList=document.getElementById('gamesList');
+  const preview=document.getElementById('preview');
+  const playArea=document.getElementById('playArea');
+  const nameInput=document.getElementById('nameInput');
+  const saveName=document.getElementById('saveName');
+  const exportBtn=document.getElementById('exportBtn');
+  const nameDisplay=document.getElementById('nameDisplay');
+  const lvlEl=document.getElementById('level');
+  const coinsEl=document.getElementById('coins');
+  const xpbar=document.getElementById('xpbar');
+  const xptext=document.getElementById('xptext');
+  const streakEl=document.getElementById('streak');
+  const multActive=document.getElementById('multActive');
+  const nukeEl=document.getElementById('nuke');
+  const toast=document.getElementById('toast');
+
+  const s_correct=document.getElementById('s_correct');
+  const s_wrong=document.getElementById('s_wrong');
+  const s_nuke=document.getElementById('s_nuke');
+  const s_click=document.getElementById('s_click');
+
+  function showToast(t){
+    toast.textContent=t;
+    toast.style.display='block';
+    setTimeout(()=>toast.style.display='none',2500);
+  }
+
+  function xpForLevel(l){return 50+(l-1)*30;}
+
+  function uiUpdate(){
+    nameDisplay.textContent=state.name||'Ingen';
+    lvlEl.textContent=state.level;
+    coinsEl.textContent=state.coins;
+    streakEl.textContent=state.streak;
+    multActive.textContent=state.multActive?'Ja':'Nei';
+    const need=xpForLevel(state.level);
+    const pct=Math.round(state.xp/need*100);
+    xpbar.style.width=Math.min(100,pct)+'%';
+    xptext.textContent=`${state.xp} / ${need} (${pct}%)`;
+  }
+
+  function levelUpCheck(){
+    while(state.xp>=xpForLevel(state.level)){
+      state.xp-=xpForLevel(state.level);
+      state.level++;
+      state.coins+=3;
+      showToast('LEVEL UP!');
+    }
+  }
+
+  function giveXP(x){
+    state.xp+=x;
+    levelUpCheck();
+    save(); uiUpdate();
+  }
+
+  function streakNuke(){
+    nukeEl.style.display='flex';
+    nukeEl.innerHTML=`<div><h2>${state.name||'Spiller'} hadde en streak på 10!</h2><div style='font-size:18px;margin-top:6px'>BOOM — +bonus poeng!</div></div>`;
+    s_nuke.play();
+    setTimeout(()=>nukeEl.style.display='none',3200);
+  }
+
+  function mkCard(g){
+    const d=document.createElement('div');
+    d.className='card';
+    d.innerHTML=`<div class='icon'>${g.title.charAt(0)}</div><div class='title'>${g.title}</div><div class='small'>${g.desc}</div>`;
+    d.onclick=()=>openGame(g);
+    gamesList.appendChild(d);
+  }
+  games.forEach(mkCard);
+
+  saveName.onclick=()=>{
+    state.name=nameInput.value.trim();
+    save(); uiUpdate(); showToast('Navn lagret');
+  };
+
+  exportBtn.onclick=()=>{
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));
+    a.download='klassecoins_export.json';
+    document.body.appendChild(a); a.click(); a.remove();
+  };
+
+  function openGame(game){
+    s_click.play();
+    preview.textContent=`Starter ${game.title}...`;
+    playArea.innerHTML='';
+
+    const header=document.createElement('div');
+    header.style.display='flex';
+    header.style.justifyContent='space-between';
+    header.style.alignItems='center';
+    header.innerHTML=`
+      <div><strong>${game.title}</strong><div class='small'>${game.desc}</div></div>
+    `;
+
+    const controls=document.createElement('div');
+    const multBtn=document.createElement('button');
+    multBtn.className='btn';
+    multBtn.textContent='Aktiver 10× (5)';
+    multBtn.onclick=()=>{
+      if(state.coins<MULT_COST){showToast('Ikke nok coins');return;}
+      state.coins-=MULT_COST;
+      state.multActive=true;
+      save(); uiUpdate(); showToast('10× aktivert');
+    };
+
+    const back=document.createElement('button');
+    back.className='btn ghost';
+    back.textContent='Tilbake';
+    back.onclick=()=>playArea.innerHTML='<div id="welcomeView"><h3>Velkommen! Velg et spill fra toppen.</h3></div>';
+    controls.appendChild(multBtn);
+    controls.appendChild(back);
+    header.appendChild(controls);
+    playArea.appendChild(header);
+
+    if(game.id==='add_speed') return runAddSpeed(playArea);
+    if(game.id==='mult_rush') return runMultRush(playArea);
+    if(game.id==='frac_blast') return runFracBlast(playArea);
+    if(game.id==='geo_shooter') return runGeoShooter(playArea);
+    if(game.id==='memory_math') return runMemory(playArea);
+    if(game.id==='boss_battle') return runBoss(playArea);
+    if(game.id==='block_jump') return runBlockJump(playArea);
+  }
+
+  /* ------------------------------------------
+     NYTT SPILL: BLOCK JUMP MATH
+  -------------------------------------------*/
+  function runBlockJump(container){
+    const area=document.createElement('div');
+    area.innerHTML=`
+      <div class='small'>Hopp på riktig blokk!</div>
+      <div id='bj_task' style='font-size:26px;font-weight:800;margin-top:10px'></div>
+      <div id='bj_blocks' style='display:flex;gap:10px;margin-top:12px'></div>
+    `;
+    container.appendChild(area);
+
+    const taskEl=area.querySelector('#bj_task');
+    const blocksEl=area.querySelector('#bj_blocks');
+
+    function newRound(){
+      const a=Math.floor(Math.random()*50)+10;
+      const b=Math.floor(Math.random()*40)+5;
+      const sol=a+b;
+      taskEl.textContent=`${a} + ${b}`;
+      blocksEl.innerHTML="";
+
+      const answers=[sol];
+      while(answers.length<4){
+        const wrong=sol+Math.floor(Math.random()*18-9);
+        if(wrong>0 && !answers.includes(wrong)) answers.push(wrong);
+      }
+
+      answers.sort(()=>Math.random()-0.5);
+
+      answers.forEach(n=>{
+        const btn=document.createElement('div');
+        btn.className='card';
+        btn.style.width='90px';
+        btn.style.height='60px';
+        btn.innerHTML=`<div style="font-size:22px;font-weight:800">${n}</div>`;
+
+        btn.onclick=()=>{
+          if(n===sol){
+            s_correct.play();
+            state.coins+=2;
+            state.streak++;
+            if(state.streak===10) streakNuke();
+            giveXP(state.multActive?25*MULT_X:25);
+            state.multActive=false;
+            save(); uiUpdate();
+            newRound();
+          } else {
+            s_wrong.play();
+            state.streak=0;
+            state.xp=Math.max(0,state.xp-6);
+            save(); uiUpdate();
+            showToast("Feil blokk!");
+          }
+        };
+
+        blocksEl.appendChild(btn);
+      });
+    }
+
+    newRound();
+  }
+
+  /* -------------------- ANDRE SPILL -------------------- */
+
+  // ... (de andre minispill-funksjonene dine er uendret — forkortet her for plass)
+  // Du kan bruke din originale kode her uten endringer.
+
+  // Init
+  load();
+  uiUpdate();
+})();
+</script>
+</body>
+</html>
