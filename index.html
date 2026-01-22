@@ -1,545 +1,207 @@
-<!doctype html>
-<html lang="no">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>KlasseCoins Hub — Mattemini-spill (Av Anker & Noah)</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#e6fffb;--card:#ffffff;--muted:#6b7280;--accent:#0ea5a4;--accent2:#7c3aed;--gold:#f59e0b}
-*{box-sizing:border-box}
-body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;margin:0;background:linear-gradient(180deg,#dffafa,#ffffff);color:#0f172a}
-.container{max-width:1200px;margin:20px auto;padding:18px}
-.header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-.logo{font-weight:800;font-size:20px;color:var(--accent2)}
-.hint{color:var(--muted);font-size:14px}
-.grid{display:grid;grid-template-columns:1fr 360px;gap:16px}
-.hub{background:var(--card);padding:14px;border-radius:14px;box-shadow:0 8px 30px rgba(15,23,42,0.06)}
-.sidebar{background:var(--card);padding:12px;border-radius:12px}
-.search{display:flex;gap:8px;margin-bottom:12px}
-.search input{flex:1;padding:10px;border-radius:10px;border:1px solid #e6eef0}
-.search button{padding:10px 12px;border-radius:10px;border:0;background:var(--accent);color:#fff}
-.playgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
-.card{background:linear-gradient(180deg,#fff,#f7fffe);padding:10px;border-radius:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;transition:transform .14s ease,box-shadow .14s}
-.card:hover{transform:translateY(-6px);box-shadow:0 14px 40px rgba(12,74,110,0.08)}
-.card .icon{width:72px;height:72px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:22px}
-.card .title{font-weight:600;font-size:14px;text-align:center}
-.preview{margin-top:12px;padding:10px;border-radius:10px;background:#f1f8f7}
-.playArea{background:linear-gradient(180deg,#ffffff,#f8fffd);padding:14px;border-radius:12px;min-height:420px;position:relative}
-.controls{display:flex;gap:8px;margin-top:10px}
-.btn{padding:8px 10px;border-radius:8px;border:0;background:var(--accent);color:#fff;cursor:pointer}
-.btn.ghost{background:transparent;border:1px solid #e6eef0;color:var(--muted)}
-.stat{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed #eef2f7}
-.small{font-size:13px;color:var(--muted)}
-.progress{height:10px;background:#eefcfb;border-radius:8px;overflow:hidden}
-.progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),#f97316)}
-.footer{margin-top:14px;color:var(--muted);font-size:13px;text-align:center}
-#nuke{position:fixed;inset:0;background:radial-gradient(circle at center, rgba(255,90,90,0.95), rgba(0,0,0,0.65));display:none;align-items:center;justify-content:center;z-index:9999;color:white;text-align:center;padding:20px}
-#nuke h2{font-size:36px;margin:0 0 12px}
-#toast{position:fixed;right:18px;bottom:18px;background:#0f172a;color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 8px 30px rgba(2,6,23,0.3);display:none}
-.canvasWrap{display:flex;gap:12px;align-items:center;flex-direction:column}
-canvas{background:linear-gradient(180deg,#aeeff0,#eafdfc);border-radius:8px;border:1px solid rgba(0,0,0,0.06)}
-@media (max-width:980px){.grid{grid-template-columns:1fr}.sidebar{order:2}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Game Site</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --accent: #22c55e;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      background: #020617;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    nav a {
+      margin-left: 16px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    nav a:hover { color: var(--accent); }
+
+    .search {
+      margin: 24px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .search input {
+      width: 100%;
+      max-width: 600px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: none;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    main {
+      padding: 0 24px 40px;
+      max-width: 1400px;
+      margin: auto;
+    }
+
+    h2 {
+      margin: 24px 0 12px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+
+    .game {
+      background: var(--card);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .game:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .game img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      background: #020617;
+    }
+
+    .game .info {
+      padding: 12px;
+    }
+
+    .game .title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .game .tag {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: var(--muted);
+      border-top: 1px solid #020617;
+    }
+
+    @media (max-width: 600px) {
+      header { flex-direction: column; align-items: flex-start; }
+      nav { margin-top: 8px; }
+    }
+  </style>
 </head>
 <body>
-<div id="nuke"></div>
-<div id="toast"></div>
-<div class="container">
-  <div class="header">
-    <div class="logo">KlasseCoins Hub</div>
-    <div class="hint">HUB med mange matte-minispill — Velg et spill for å starte. (Av Anker & Noah)</div>
+
+  <header>
+    <div class="logo">MyGames</div>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">New</a>
+      <a href="#">Popular</a>
+      <a href="#">Categories</a>
+    </nav>
+  </header>
+
+  <div class="search">
+    <input type="text" placeholder="Search games..." />
   </div>
 
-  <div class="grid">
-    <div class="hub">
-      <div class="search">
-        <input id="search" placeholder="Søk spill..." />
-        <button id="filterBtn">Filtrer</button>
+  <main>
+    <h2>Popular Games</h2>
+    <div class="grid">
+      <div class="game" onclick="alert('Open Game 1')">
+        <img src="https://via.placeholder.com/400x300" alt="Game 1" />
+        <div class="info">
+          <div class="title">Car Racer</div>
+          <div class="tag">Racing</div>
+        </div>
       </div>
 
-      <div class="playgrid" id="gamesList"></div>
+      <div class="game" onclick="alert('Open Game 2')">
+        <img src="https://via.placeholder.com/400x300" alt="Game 2" />
+        <div class="info">
+          <div class="title">Stickman Fight</div>
+          <div class="tag">Action</div>
+        </div>
+      </div>
 
-      <div class="preview" id="preview">Velg et spill for å se forhåndsvisning.</div>
+      <div class="game" onclick="alert('Open Game 3')">
+        <img src="https://via.placeholder.com/400x300" alt="Game 3" />
+        <div class="info">
+          <div class="title">Puzzle Blocks</div>
+          <div class="tag">Puzzle</div>
+        </div>
+      </div>
 
-      <div style="margin-top:12px" class="playArea" id="playArea">
-        <div id="welcomeView">
-          <h3>Velkommen! Velg et spill fra toppen.</h3>
-          <p class="small">Din progress og poeng deles mellom spill — bruk Klassecoins for boosters!</p>
+      <div class="game" onclick="alert('Open Game 4')">
+        <img src="https://via.placeholder.com/400x300" alt="Game 4" />
+        <div class="info">
+          <div class="title">Soccer Pro</div>
+          <div class="tag">Sports</div>
         </div>
       </div>
     </div>
 
-    <div class="sidebar">
-      <div class="stat"><div class="small">Navn</div><div id="nameDisplay">Ingen</div></div>
-      <div class="stat"><div class="small">Level</div><div id="level">1</div></div>
-      <div class="stat"><div class="small">Klassecoins</div><div id="coins">0</div></div>
-      <div style="padding-top:8px">
-        <div class="small">XP</div>
-        <div class="progress" style="margin-top:6px"><i id="xpbar" style="width:0%"></i></div>
-        <div class="small" style="margin-top:6px" id="xptext">0 / 50 (0%)</div>
-      </div>
-
-      <div style="margin-top:8px" class="small">Streak: <span id="streak">0</span></div>
-      <div style="margin-top:8px" class="small">10× aktiv: <span id="multActive">Nei</span></div>
-
-      <div style="margin-top:12px">
-        <input id="nameInput" placeholder="Ditt navn..." style="padding:8px;border-radius:8px;border:1px solid #eef6f5;width:100%" />
-        <div style="display:flex;gap:8px;margin-top:8px">
-          <button class="btn" id="saveName">Lagre</button>
-          <button class="btn ghost" id="exportBtn">Eksporter</button>
+    <h2>New Games</h2>
+    <div class="grid">
+      <div class="game" onclick="alert('Open Game 5')">
+        <img src="https://via.placeholder.com/400x300" alt="Game 5" />
+        <div class="info">
+          <div class="title">Zombie Escape</div>
+          <div class="tag">Survival</div>
         </div>
       </div>
 
-      <div style="margin-top:12px" class="small">Av Anker & Noah</div>
+      <div class="game" onclick="alert('Open Game 6')">
+        <img src="https://via.placeholder.com/400x300" alt="Game 6" />
+        <div class="info">
+          <div class="title">Tower Defense</div>
+          <div class="tag">Strategy</div>
+        </div>
+      </div>
     </div>
-  </div>
+  </main>
 
-  <div class="footer">Tips: Bruk 10× booster når du har streak! Score lagres lokalt.</div>
-</div>
+  <footer>
+    © 2026 MyGames. All games belong to their owners.
+  </footer>
 
-<!-- Audio assets -->
-<audio id="s_correct" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
-<audio id="s_wrong" src="https://actions.google.com/sounds/v1/cartoon/boing.ogg"></audio>
-<audio id="s_nuke" src="https://actions.google.com/sounds/v1/alarms/nuclear_alarm.ogg"></audio>
-<audio id="s_click" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
-
-<script>
-(() => {
-  const STORAGE = 'klassecoins_hub_v2';
-  const MULT_COST = 5;
-  const MULT_X = 10;
-
-  const games = [
-    {id:'add_speed', title:'Hoderegning Speed', tag:'add', desc:'Svar så mange addisjoner du kan på 30s.'},
-    {id:'mult_rush', title:'Gangetabell Rush', tag:'mult', desc:'Rask gange-prøve med stigende vanskelighet.'},
-    {id:'frac_blast', title:'Brøk Blaster', tag:'frac', desc:'Gjett hvem som har størst brøk.'},
-    {id:'geo_shooter', title:'Geometri Shooter', tag:'geo', desc:'Hvilken form har dette? Raskt!'},
-    {id:'memory_math', title:'Memory Mattemix', tag:'mem', desc:'Memory hvor kortene er regnestykker.'},
-    {id:'boss_battle', title:'Boss Mattekamp', tag:'boss', desc:'Tidspress + flere trinn = boss!'},
-    {id:'block_jump', title:'Block Jump Math', tag:'jump', desc:'Hopp på riktig tallblokk! (2D)'}
-  ];
-
-  let state = {name:'', xp:0, level:1, coins:0, streak:0, multActive:false, bests:{}};
-  const load = ()=>{ try{ const s=localStorage.getItem(STORAGE); if(s) state = Object.assign(state, JSON.parse(s)); } catch(e){} };
-  const save = ()=>{ try{ localStorage.setItem(STORAGE, JSON.stringify(state)); } catch(e){} };
-
-  // DOM refs
-  const gamesList = document.getElementById('gamesList');
-  const preview = document.getElementById('preview');
-  const playArea = document.getElementById('playArea');
-  const nameInput = document.getElementById('nameInput');
-  const saveName = document.getElementById('saveName');
-  const exportBtn = document.getElementById('exportBtn');
-  const nameDisplay = document.getElementById('nameDisplay');
-  const lvlEl = document.getElementById('level');
-  const coinsEl = document.getElementById('coins');
-  const xpbar = document.getElementById('xpbar');
-  const xptext = document.getElementById('xptext');
-  const streakEl = document.getElementById('streak');
-  const multActive = document.getElementById('multActive');
-  const nukeEl = document.getElementById('nuke');
-  const toast = document.getElementById('toast');
-
-  const s_correct = document.getElementById('s_correct');
-  const s_wrong = document.getElementById('s_wrong');
-  const s_nuke = document.getElementById('s_nuke');
-  const s_click = document.getElementById('s_click');
-
-  function showToast(t){ toast.textContent = t; toast.style.display = 'block'; setTimeout(()=> toast.style.display = 'none', 2200); }
-
-  function xpForLevel(l){ return 50 + (l-1)*30; }
-  function uiUpdate(){
-    nameDisplay.textContent = state.name || 'Ingen';
-    lvlEl.textContent = state.level;
-    coinsEl.textContent = state.coins;
-    streakEl.textContent = state.streak;
-    multActive.textContent = state.multActive ? 'Ja' : 'Nei';
-    const need = xpForLevel(state.level);
-    const pct = Math.round(state.xp/need*100);
-    xpbar.style.width = Math.min(100,pct)+'%';
-    xptext.textContent = `${state.xp} / ${need} (${pct}%)`;
-  }
-
-  function levelUpCheck(){ while(state.xp >= xpForLevel(state.level)){ state.xp -= xpForLevel(state.level); state.level++; state.coins += 3; showToast('LEVEL UP!'); } }
-  function giveXP(xpGain){ state.xp += xpGain; levelUpCheck(); save(); uiUpdate(); }
-
-  function streakNuke(){ nukeEl.style.display='flex'; nukeEl.innerHTML = `<div><h2>${state.name || 'Spiller'} hadde en streak på 10!</h2><div style="font-size:18px;margin-top:6px">BOOM — +bonus poeng!</div></div>`; s_nuke.play(); setTimeout(()=> nukeEl.style.display='none', 3200); }
-
-  // Build hub cards
-  function mkCard(g){ const d = document.createElement('div'); d.className='card'; d.innerHTML = `<div class='icon'>${g.title.charAt(0)}</div><div class='title'>${g.title}</div><div class='small'>${g.desc}</div>`; d.onclick = ()=> openGame(g); gamesList.appendChild(d); }
-  games.forEach(mkCard);
-
-  // preview hover
-  document.querySelectorAll('.card').forEach(c=>{
-    c.addEventListener('mouseenter',()=>{ preview.textContent = c.querySelector('.title').textContent + ' — ' + c.querySelector('.small').textContent; });
-    c.addEventListener('mouseleave',()=>{ preview.textContent = 'Velg et spill for å se forhåndsvisning.'; });
-  });
-
-  // export & save name
-  exportBtn.onclick = ()=>{ const a=document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'})); a.download='klassecoins_export.json'; document.body.appendChild(a); a.click(); a.remove(); };
-  saveName.onclick = ()=>{ state.name = nameInput.value.trim(); save(); uiUpdate(); showToast('Navn lagret'); };
-
-  // openGame
-  function openGame(game){
-    s_click.play();
-    preview.textContent = `Starter ${game.title}...`;
-    playArea.innerHTML = '';
-    const header = document.createElement('div');
-    header.style.display='flex'; header.style.justifyContent='space-between'; header.style.alignItems='center';
-    header.innerHTML = `<div><strong>${game.title}</strong><div class='small'>${game.desc}</div></div>`;
-    const controls = document.createElement('div');
-    const multBtn = document.createElement('button'); multBtn.className='btn'; multBtn.textContent='Aktiver 10× (5)';
-    multBtn.onclick = ()=>{ if(state.coins < MULT_COST){ showToast('Ikke nok coins'); return; } state.coins -= MULT_COST; state.multActive = true; save(); uiUpdate(); showToast('10× aktivert'); };
-    const back = document.createElement('button'); back.className='btn ghost'; back.textContent='Tilbake'; back.onclick = ()=> { playArea.innerHTML = '<div id="welcomeView"><h3>Velkommen! Velg et spill fra toppen.</h3></div>'; };
-    controls.appendChild(multBtn); controls.appendChild(back);
-    header.appendChild(controls);
-    playArea.appendChild(header);
-
-    if(game.id === 'add_speed') return runAddSpeed(playArea);
-    if(game.id === 'mult_rush') return runMultRush(playArea);
-    if(game.id === 'frac_blast') return runFracBlast(playArea);
-    if(game.id === 'geo_shooter') return runGeoShooter(playArea);
-    if(game.id === 'memory_math') return runMemory(playArea);
-    if(game.id === 'boss_battle') return runBoss(playArea);
-    if(game.id === 'block_jump') return runBlockJump(playArea);
-  }
-
-  /* ------------------- GAMES ------------------- */
-  // 1) Add Speed
-  function runAddSpeed(container){
-    let time = 30, score = 0;
-    const area = document.createElement('div');
-    area.innerHTML = `<div style='display:flex;gap:12px;align-items:center'><div><strong>Tid:</strong> <span id='t'>${time}</span>s</div><div><strong>Score:</strong> <span id='sc'>0</span></div></div>
-      <div style='margin-top:12px'><div id='q' style='font-size:28px;font-weight:800'></div><input id='ans' style='padding:8px;margin-top:8px;border-radius:8px;border:1px solid #eef6f5'/><div style='margin-top:8px'><button id='ok' class='btn'>Send</button></div></div>`;
-    container.appendChild(area);
-    const qEl = area.querySelector('#q'); const ans = area.querySelector('#ans'); const tEl = area.querySelector('#t'); const scEl = area.querySelector('#sc'); const ok = area.querySelector('#ok');
-    function newQ(){ const a = Math.floor(Math.random()*20)+1; const b = Math.floor(Math.random()*20)+1; qEl.textContent = `${a} + ${b}`; qEl.dataset.sol = a+b; ans.value=''; ans.focus(); }
-    newQ();
-    ok.onclick = ()=>{ const v = Number(ans.value.trim()); if(v === Number(qEl.dataset.sol)){ score++; scEl.textContent = score; s_correct.play(); state.coins +=1 + Math.floor(state.level/2); state.streak++; if(state.streak===10) streakNuke(); const xpGain = state.multActive ? 20*MULT_X : 20; giveXP(xpGain); state.multActive=false; save(); uiUpdate(); } else { s_wrong.play(); state.streak=0; state.xp = Math.max(0,state.xp-5); save(); uiUpdate(); } newQ(); };
-    const timer = setInterval(()=>{ time--; tEl.textContent=time; if(time<=0){ clearInterval(timer); showToast('Tid ute! Score: '+score); state.coins += Math.floor(score/3); giveXP(10 + score*2); save(); uiUpdate(); } },1000);
-  }
-
-  // 2) Multiplication Rush
-  function runMultRush(container){
-    let need=12, correct=0;
-    const area=document.createElement('div');
-    area.innerHTML=`<div><strong>Mål:</strong> ${need} riktige</div><div id='q2' style='font-size:28px;margin-top:8px'></div><input id='a2' style='padding:8px;border-radius:8px;border:1px solid #eef6f5'/><div style='margin-top:8px'><button id='ok2' class='btn'>Sjekk</button></div><div style='margin-top:8px' class='small'>Riktige: <span id='r'>0</span></div>`;
-    container.appendChild(area);
-    const q = area.querySelector('#q2'); const a = area.querySelector('#a2'); const ok = area.querySelector('#ok2'); const r = area.querySelector('#r');
-    function newQ(){ const n = Math.max(2,state.level); const x = Math.floor(Math.random()*n*2)+2; const y = Math.floor(Math.random()*12)+2; q.textContent = `${x} × ${y}`; q.dataset.sol = x*y; a.value=''; a.focus(); }
-    newQ();
-    ok.onclick = ()=>{ const val = Number(a.value.trim()); if(val===Number(q.dataset.sol)){ correct++; r.textContent=correct; s_correct.play(); state.coins+=1; state.streak++; if(state.streak===10) streakNuke(); const xpGain = state.multActive?15*MULT_X:15; giveXP(xpGain); state.multActive=false; save(); uiUpdate(); } else { s_wrong.play(); state.streak=0; state.xp=Math.max(0,state.xp-5); save(); uiUpdate(); } if(correct>=need){ showToast('Du vant Multiplication Rush!'); state.coins+=10; giveXP(50); save(); uiUpdate(); } else newQ(); };
-  }
-
-  // 3) Fraction Blast
-  function runFracBlast(container){
-    const area=document.createElement('div');
-    area.innerHTML = `<div class='small'>Velg den største brøken</div><div id='choices' style='display:flex;gap:8px;margin-top:10px'></div>`;
-    container.appendChild(area);
-    function gen(){
-      const arr=[];
-      for(let i=0;i<3;i++){ const a=Math.floor(Math.random()*9)+1; const b=Math.floor(Math.random()*9)+1; arr.push({a,b,val:a/b}); }
-      arr.sort(()=>Math.random()-0.5);
-      const choices=area.querySelector('#choices'); choices.innerHTML='';
-      arr.forEach(o=>{
-        const b = document.createElement('button'); b.className='card'; b.style.minWidth='80px'; b.innerHTML=`<div style='font-weight:700'>${o.a}/${o.b}</div>`;
-        b.onclick = ()=>{ const biggest = arr.reduce((p,c)=> c.val>p.val?c:p,arr[0]); if(o===biggest){ s_correct.play(); state.coins+=2; state.streak++; if(state.streak===10) streakNuke(); giveXP(state.multActive?25*MULT_X:25); state.multActive=false; save(); uiUpdate(); showToast('Riktig!'); } else { s_wrong.play(); state.streak=0; state.xp=Math.max(0,state.xp-5); save(); uiUpdate(); showToast('Feil!'); } gen(); };
-        choices.appendChild(b);
-      });
-    }
-    gen();
-  }
-
-  // 4) Geo Shooter
-  function runGeoShooter(container){
-    const area=document.createElement('div');
-    area.innerHTML=`<div class='small'>Klikk riktig form</div><div id='shapes' style='display:flex;gap:8px;margin-top:10px'></div>`;
-    container.appendChild(area);
-    const forms=['Sirkel','Kvadrat','Trekant','Rektangel'];
-    function gen(){
-      const correct = forms[Math.floor(Math.random()*forms.length)];
-      const shapesEl = area.querySelector('#shapes');
-      shapesEl.innerHTML='';
-      forms.sort(()=>Math.random()-0.5).forEach(f=>{
-        const b=document.createElement('button'); b.className='card'; b.style.minWidth='90px'; b.innerHTML=`<div style='font-weight:700'>${f}</div>`;
-        b.onclick=()=>{ if(f===correct){ s_correct.play(); state.coins++; state.streak++; if(state.streak===10) streakNuke(); giveXP(state.multActive?18*MULT_X:18); state.multActive=false; save(); uiUpdate(); showToast('Riktig'); } else { s_wrong.play(); state.streak=0; state.xp=Math.max(0,state.xp-5); save(); uiUpdate(); showToast('Feil'); } gen(); };
-        shapesEl.appendChild(b);
-      });
-      shapesEl.insertAdjacentHTML('afterbegin', `<div style='font-weight:700;margin-right:12px'>Finn: ${correct}</div>`);
-    }
-    gen();
-  }
-
-  // 5) Memory Math
-  function runMemory(container){
-    const area=document.createElement('div');
-    area.innerHTML=`<div class='small'>Finn par hvor to kort gir samme sum</div><div id='board' style='display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px'></div>`;
-    container.appendChild(area);
-    function genBoard(){
-      const board = area.querySelector('#board'); board.innerHTML='';
-      const nums = [];
-      for(let i=0;i<8;i++){ const a=Math.floor(Math.random()*10)+1; const b=Math.floor(Math.random()*10)+1; nums.push({text:`${a}+${b}`,val:a+b}); nums.push({text:`${b}+${a}`,val:a+b}); }
-      nums.sort(()=>Math.random()-0.5);
-      let first = null;
-      nums.forEach((n,idx)=>{
-        const c=document.createElement('div'); c.className='card'; c.style.height='60px'; c.dataset.val=n.val; c.innerHTML='<div class="small">?</div>';
-        c.onclick=()=>{
-          if(c.classList.contains('matched')) return;
-          c.innerHTML = `<div style="font-weight:700">${n.text}</div>`;
-          if(!first){ first = c; } else {
-            if(first.dataset.val === c.dataset.val){ first.classList.add('matched'); c.classList.add('matched'); s_correct.play(); state.coins++; state.streak++; if(state.streak===10) streakNuke(); giveXP(20); save(); uiUpdate(); } else { s_wrong.play(); setTimeout(()=>{ first.innerHTML='<div class="small">?</div>'; c.innerHTML='<div class="small">?</div>'; },600); state.streak=0; state.xp=Math.max(0,state.xp-5); save(); uiUpdate(); }
-            first = null;
-          }
-        };
-        board.appendChild(c);
-      });
-    }
-    genBoard();
-  }
-
-  // 6) Boss battle
-  function runBoss(container){
-    const area=document.createElement('div');
-    area.innerHTML=`<div class='small'>Boss-kamp: 3 runder med økende vanskelighet</div><div id='bossArea' style='margin-top:10px'></div>`;
-    container.appendChild(area);
-    let round=1; let hp=3;
-    function roundPlay(){
-      const box=area.querySelector('#bossArea'); box.innerHTML = `<div><strong>Runde ${round}/3</strong></div><div id='qbox' style='margin-top:8px;font-size:22px'></div><input id='a' style='margin-top:8px;padding:8px;border-radius:8px;border:1px solid #eef6f5'/><div style='margin-top:8px'><button id='ok' class='btn'>Svar</button></div>`;
-      const qbox = box.querySelector('#qbox'); const a = box.querySelector('#a'); const ok = box.querySelector('#ok');
-      const a1 = Math.floor(Math.random()*(round*10))+1; const a2 = Math.floor(Math.random()*(round*8))+1;
-      qbox.textContent = `${a1} + ${a2}`; qbox.dataset.sol = a1 + a2;
-      ok.onclick = ()=>{ if(Number(a.value.trim()) === Number(qbox.dataset.sol)){ s_correct.play(); giveXP(25*round); state.coins += 2*round; state.streak++; if(state.streak===10) streakNuke(); save(); uiUpdate(); round++; if(round>3){ showToast('Boss beseiret!'); state.coins += 15; giveXP(100); save(); uiUpdate(); box.innerHTML='<div>Gratulerer! Boss beseiret.</div>'; } else roundPlay(); } else { s_wrong.play(); hp--; state.streak=0; state.xp=Math.max(0,state.xp-10); save(); uiUpdate(); if(hp<=0){ box.innerHTML='<div>Du ble slått av bossen. Prøv igjen.</div>'; } else { showToast('Feil! Boss angriper! HP:'+hp); } } };
-    }
-    roundPlay();
-  }
-
-  /* ------------------- BLOCK JUMP (2D Canvas) ------------------- */
-  function runBlockJump(container){
-    // create UI
-    const wrap = document.createElement('div'); wrap.className='canvasWrap';
-    const info = document.createElement('div'); info.style.display='flex'; info.style.gap='12px'; info.style.alignItems='center';
-    const taskEl = document.createElement('div'); taskEl.style.fontSize='20px'; taskEl.style.fontWeight='800';
-    const statusEl = document.createElement('div'); statusEl.className='small';
-    info.appendChild(taskEl); info.appendChild(statusEl);
-    const canvas = document.createElement('canvas'); canvas.width = 640; canvas.height = 240;
-    wrap.appendChild(info); wrap.appendChild(canvas);
-    container.appendChild(wrap);
-
-    const ctx = canvas.getContext('2d');
-
-    // simple physics player
-    const player = { x:60, y:140, w:20, h:20, vx:0, vy:0, onGround:false, color:'#1eae7a' };
-    const gravity = 0.9, friction = 0.85;
-    let left=false, right=false, jump=false;
-
-    // level - blocks with numbers
-    let blocks = [];
-    let a,b,sol;
-    let score = 0;
-    let lives = 3;
-    let paused=false;
-
-    function newLevel(){
-      // new task and blocks
-      a = Math.floor(Math.random()*60)+10;
-      b = Math.floor(Math.random()*50)+1;
-      sol = a + b;
-      taskEl.textContent = `Finn blokken med: ${a} + ${b} = ?`;
-      statusEl.textContent = `Score: ${score} • Liv: ${lives}`;
-      // blocks – one correct and some decoys
-      blocks = [];
-      const correctIndex = Math.floor(Math.random()*5);
-      const positions = [120,200,280,360,440];
-      for(let i=0;i<5;i++){
-        let val;
-        if(i===correctIndex) val = sol;
-        else {
-          // decoy values not equal to sol
-          let offset = Math.floor(Math.random()*30)-15;
-          val = Math.max(1, sol + offset);
-          if(val === sol) val += 7;
-        }
-        blocks.push({ x: positions[i], y: 170, w: 70, h: 18, val });
-      }
-      // reset player position
-      player.x = 60; player.y = 140; player.vx = 0; player.vy = 0; player.onGround = false;
-    }
-
-    function draw(){
-      // background
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      // sky
-      ctx.fillStyle = '#bff2ef';
-      ctx.fillRect(0,0,canvas.width,canvas.height);
-      // ground
-      ctx.fillStyle = '#7bd3c9';
-      ctx.fillRect(0,190,canvas.width,50);
-
-      // draw blocks
-      blocks.forEach(bk=>{
-        ctx.fillStyle = (bk.val===sol) ? '#ff67b0' : '#2fc1e5';
-        ctx.fillRect(bk.x, bk.y, bk.w, bk.h);
-        ctx.fillStyle = '#fff';
-        ctx.font = 'bold 18px Inter, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText(String(bk.val), bk.x + bk.w/2, bk.y + 14);
-      });
-
-      // draw player
-      ctx.fillStyle = player.color;
-      ctx.fillRect(player.x, player.y, player.w, player.h);
-      // eyes
-      ctx.fillStyle='#fff';
-      ctx.fillRect(player.x+3, player.y+4,4,4);
-      ctx.fillRect(player.x+11, player.y+4,4,4);
-
-      // HUD small
-      ctx.fillStyle='#08303a'; ctx.font='12px Inter, sans-serif';
-      ctx.textAlign='left';
-      ctx.fillText(`Score: ${score}`, 10, 20);
-      ctx.fillText(`Liv: ${lives}`, 10, 36);
-    }
-
-    function update(){
-      if(paused) return;
-      // controls
-      if(left) player.vx -= 0.9;
-      if(right) player.vx += 0.9;
-      player.vy += gravity;
-      player.vx *= 0.88;
-      player.x += player.vx;
-      player.y += player.vy;
-
-      // floor collision
-      if(player.y + player.h > 190){
-        player.y = 190 - player.h;
-        player.vy = 0;
-        player.onGround = true;
-      } else player.onGround = false;
-
-      // walls
-      if(player.x < 0) player.x = 0;
-      if(player.x + player.w > canvas.width) player.x = canvas.width - player.w;
-
-      // block collisions (top landing)
-      for(let bk of blocks){
-        // AABB check
-        if(player.x + player.w > bk.x && player.x < bk.x + bk.w && player.y + player.h > bk.y && player.y < bk.y + bk.h){
-          // collision – check if player is falling onto block (from above)
-          if(player.vy >= 0 && (player.y + player.h - player.vy) <= bk.y + 4){
-            // place player on top
-            player.y = bk.y - player.h;
-            player.vy = 0;
-            player.onGround = true;
-            // landed on block -> check value
-            handleLanding(bk);
-          } else {
-            // side collision: push player out a bit
-            if(player.x < bk.x) player.x = bk.x - player.w - 0.5;
-            else player.x = bk.x + bk.w + 0.5;
-            player.vx = 0;
-          }
-        }
-      }
-    }
-
-    let lastLandTime = 0;
-    function handleLanding(block){
-      // prevent multiple triggers in same landing
-      const now = Date.now();
-      if(now - lastLandTime < 220) return;
-      lastLandTime = now;
-      if(block.val === sol){
-        s_correct.play();
-        score += 1;
-        state.coins += 2;
-        state.streak++; if(state.streak===10) streakNuke();
-        giveXP(state.multActive?30*MULT_X:30);
-        state.multActive = false; save(); uiUpdate();
-        showToast('Riktig! Neste nivå...');
-        // small bounce
-        player.vy = -7;
-        setTimeout(()=> newLevel(), 600);
-      } else {
-        s_wrong.play();
-        state.streak = 0;
-        state.xp = Math.max(0, state.xp - 8);
-        save(); uiUpdate();
-        lives -= 1;
-        showToast('Feil blokk! -1 liv');
-        // knock back
-        player.vy = -6;
-        player.vx = -3;
-        if(lives <= 0){
-          showToast('Game over — prøv igjen!');
-          // reward small consolation and reset
-          state.coins += Math.floor(score/2);
-          giveXP(Math.max(5, score*4));
-          score = 0; lives = 3; state.streak = 0; save(); uiUpdate();
-          setTimeout(()=> newLevel(), 800);
-        }
-      }
-    }
-
-    // controls events
-    window.addEventListener('keydown', kd);
-    window.addEventListener('keyup', ku);
-    function kd(e){
-      if(e.code === 'ArrowLeft' || e.code === 'KeyA') left = true;
-      if(e.code === 'ArrowRight' || e.code === 'KeyD') right = true;
-      if((e.code === 'ArrowUp' || e.code === 'Space' || e.code === 'KeyW') && player.onGround){ player.vy = -12; player.onGround = false; s_click.play(); }
-    }
-    function ku(e){
-      if(e.code === 'ArrowLeft' || e.code === 'KeyA') left = false;
-      if(e.code === 'ArrowRight' || e.code === 'KeyD') right = false;
-    }
-
-    // touch / on-screen buttons (mobile)
-    const mobileControls = document.createElement('div');
-    mobileControls.style.display='flex'; mobileControls.style.gap='8px'; mobileControls.style.marginTop='8px';
-    const btnL = document.createElement('button'); btnL.className='btn ghost'; btnL.textContent='←';
-    const btnR = document.createElement('button'); btnR.className='btn ghost'; btnR.textContent='→';
-    const btnJ = document.createElement('button'); btnJ.className='btn'; btnJ.textContent='Hopp';
-    btnL.onpointerdown = ()=> left=true; btnL.onpointerup = ()=> left=false;
-    btnR.onpointerdown = ()=> right=true; btnR.onpointerup = ()=> right=false;
-    btnJ.onpointerdown = ()=> { if(player.onGround) { player.vy = -12; player.onGround = false; s_click.play(); } };
-    mobileControls.appendChild(btnL); mobileControls.appendChild(btnR); mobileControls.appendChild(btnJ);
-    wrap.appendChild(mobileControls);
-
-    // game loop
-    let raf;
-    function loop(){
-      update(); draw();
-      raf = requestAnimationFrame(loop);
-    }
-
-    // start
-    newLevel();
-    loop();
-
-    // cleanup when leaving the game (if container is cleared)
-    const observer = new MutationObserver((mut)=>{
-      if(!document.body.contains(container)){
-        cancelAnimationFrame(raf);
-        window.removeEventListener('keydown', kd);
-        window.removeEventListener('keyup', ku);
-        observer.disconnect();
-      }
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
-  }
-
-  // init
-  load(); uiUpdate();
-
-  // (rebuild hover - ensure cards clickable)
-  document.querySelectorAll('.card').forEach(c=>{
-    c.addEventListener('mouseenter',()=>{ preview.textContent = c.querySelector('.title').textContent + ' — ' + c.querySelector('.small').textContent; });
-    c.addEventListener('mouseleave',()=>{ preview.textContent = 'Velg et spill for å se forhåndsvisning.'; });
-  });
-
-})();
-</script>
 </body>
 </html>
